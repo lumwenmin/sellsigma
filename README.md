@@ -44,3 +44,49 @@ Define subreddits + intent signals
       -> Flag opportunities to you (dashboard / notifications)
          -> You engage manually in-thread
             -> Funnel into your existing sales motion (optional)
+```
+
+## Development Setup
+
+### Prerequisites
+- Docker + Docker Compose
+- Node.js 18+ and Supabase CLI v2 (`npm install -g supabase@2`)
+- Python 3.11+ (for local linting/IDE support)
+
+### 1. Environment variables
+```bash
+cp .env.example .env
+# fill in .env with your credentials
+```
+
+### 2. Local Python environment (for IDE linting only — app runs in Docker)
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt -r scraper/requirements.txt
+```
+Then in VS Code: `Cmd+Shift+P` → **Python: Select Interpreter** → pick `.venv` (root).
+
+### 3. Start local Supabase (port 4999)
+```bash
+supabase start
+```
+
+### 4. Run the app
+```bash
+docker compose up frontend backend
+```
+
+### 5. Test the scraper manually
+```bash
+docker compose --profile scraper run scraper
+```
+
+### Local URLs
+
+| URL | Service |
+|-----|---------|
+| http://localhost:8001 | React frontend |
+| http://localhost:8000 | FastAPI backend |
+| http://localhost:8000/docs | FastAPI auto-generated docs |
+| http://localhost:4999 | Supabase Studio |

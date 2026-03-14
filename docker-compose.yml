@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8001:8001"
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+    volumes:
+      - ./backend:/app
+
+  supabase:
+    # Local Supabase Studio — dev only
+    # Requires: npx supabase start (Supabase CLI manages the actual containers)
+    # Studio will be available at http://localhost:4999
+    # This service block is a placeholder — run `supabase start` separately
+    profiles:
+      - local-supabase
+
+  scraper:
+    build:
+      context: ./scraper
+    environment:
+      - REDDIT_CLIENT_ID=${REDDIT_CLIENT_ID}
+      - REDDIT_CLIENT_SECRET=${REDDIT_CLIENT_SECRET}
+      - REDDIT_USER_AGENT=${REDDIT_USER_AGENT}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    profiles:
+      - scraper   # not started by default; triggered manually or via cron

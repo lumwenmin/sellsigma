@@ -1,0 +1,4 @@
+asyncpraw
+supabase
+openai
+python-dotenv

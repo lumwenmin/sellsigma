@@ -9,6 +9,8 @@ services:
       - "8001:8001"
     environment:
       - VITE_API_URL=${VITE_API_URL}
+      - VITE_SUPABASE_URL=${SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -45,6 +47,6 @@ services:
       - REDDIT_USER_AGENT=${REDDIT_USER_AGENT}
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     profiles:
       - scraper   # not started by default; triggered manually or via cron

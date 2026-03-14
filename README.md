@@ -6,8 +6,6 @@ It helps small teams surface **high-intent** posts (pain signals, “looking for
 
 SellSigma is **not** a replacement for your sales team, pipeline, or existing sales motion. It’s a **supplement** that improves the *top-of-funnel* by reducing time spent hunting for leads and increasing the odds that your outreach is timely and relevant.
 
----
-
 ## What SellSigma is (and isn’t)
 
 ### ✅ SellSigma is for
@@ -23,8 +21,6 @@ SellSigma is **not** a replacement for your sales team, pipeline, or existing sa
 
 SellSigma’s job is to help you identify **where demand already exists** — you still win by being helpful, human, and relevant in the conversation.
 
----
-
 ## How to use SellSigma
 
 1. **Define what to monitor**
@@ -39,8 +35,6 @@ SellSigma’s job is to help you identify **where demand already exists** — yo
    - You review flagged threads
    - You participate in the thread as a human (helpful, non-spammy, value-first)
    - You optionally move the conversation into your existing funnel when appropriate
-
----
 
 ## High-level flow
 

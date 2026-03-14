@@ -49,8 +49,8 @@ sellsigma/
 
 | Service       | Local Port | Notes                              |
 |---------------|------------|------------------------------------|
-| Frontend      | 5001       | React + Vite dev server            |
-| Backend       | 5000       | FastAPI via uvicorn                |
+| Frontend      | 8001       | React + Vite dev server            |
+| Backend       | 8000       | FastAPI via uvicorn                |
 | Supabase Studio | 4999     | Local only via Supabase CLI        |
 | Supabase API  | 54341      | Local only (set as SUPABASE_URL)   |
 | Supabase DB   | 54342      | Local only                         |
@@ -94,7 +94,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "5001:5001"
+      - "8001:8001"
     environment:
       - VITE_API_URL=${VITE_API_URL}
     volumes:
@@ -107,7 +107,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "5000:5000"
+      - "8000:8000"
     environment:
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
@@ -154,8 +154,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 5001
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5001"]
+EXPOSE 8001
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "8001"]
 ```
 
 ### frontend/vite.config.js
@@ -167,7 +167,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5001,
+    port: 8001,
     host: "0.0.0.0",
   },
 });
@@ -202,8 +202,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-EXPOSE 5000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 ```
 
 ### backend/requirements.txt
@@ -388,7 +388,7 @@ jobs:
 ### Backend → Render
 - New Web Service → connect repo → set root directory to `backend/`
 - Runtime: Docker (uses `backend/Dockerfile`)
-- Port: `5000`
+- Port: `8000`
 - Add all backend env vars in Render dashboard
 - Free tier: spins down after 15 min inactivity (acceptable for daily cron use case)
 

@@ -1,4 +1,4 @@
 asyncpraw
 supabase
-openai
+google-genai
 python-dotenv

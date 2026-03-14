@@ -1,22 +1,25 @@
 import os
-from openai import AsyncOpenAI
+import json
+from google import genai
+from google.genai import types
 
-client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 SYSTEM_PROMPT = """You are a sales signal classifier. Given a Reddit post title and body,
 determine if it shows buying intent or a pain point that a SaaS product could address.
 
 Respond with JSON: {"is_intent": true/false, "score": 0.0-1.0, "matched_signals": ["signal1", ...]}"""
 
+
 async def classify_post(title: str, body: str) -> dict:
-    response = await client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Title: {title}\n\nBody: {body}"},
-        ],
-        response_format={"type": "json_object"},
-        temperature=0,
+    response = await client.aio.models.generate_content(
+        model="gemini-2-flash-preview",
+        contents=f"Title: {title}\n\nBody: {body}",
+        config=types.GenerateContentConfig(
+            system_instruction=SYSTEM_PROMPT,
+            response_mime_type="application/json",
+        ),
     )
-    import json
-    return json.loads(response.choices[0].message.content)
+    if not response.text:
+        raise ValueError("Empty response from Gemini")
+    return json.loads(response.text)

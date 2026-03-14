@@ -1,13 +1,42 @@
-import React from "react";
-import { Container, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { supabase } from "./supabaseClient";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+
+function ProtectedRoute({ session, children }) {
+  if (session === undefined) return null; // loading
+  if (!session) return <Navigate to="/login" replace />;
+  return children;
+}
 
 export default function App() {
+  const [session, setSession] = useState(undefined); // undefined = loading
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Typography variant="h4">SellSigma</Typography>
-      <Typography variant="body1" color="text.secondary">
-        Reddit intent monitoring dashboard
-      </Typography>
-    </Container>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute session={session}>
+              <DashboardPage session={session} />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

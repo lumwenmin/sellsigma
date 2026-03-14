@@ -77,7 +77,13 @@ supabase start
 docker compose up frontend backend
 ```
 
-### 5. Test the scraper manually
+### 5. Stop the app
+```bash
+docker compose down       # stop frontend + backend
+supabase stop             # stop local Supabase + database
+```
+
+### 6. Test the scraper manually
 ```bash
 docker compose --profile scraper run scraper
 ```

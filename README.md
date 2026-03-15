@@ -69,18 +69,18 @@ Then in VS Code: `Cmd+Shift+P` → **Python: Select Interpreter** → pick `.ven
 
 ### 3. Start local Supabase (port 4999)
 ```bash
-supabase start
+npx supabase start
 ```
 
 ### 4. Run the app
 ```bash
-docker compose up frontend backend
+docker compose up frontend backend --build
 ```
 
 ### 5. Stop the app
 ```bash
 docker compose down       # stop frontend + backend
-supabase stop             # stop local Supabase + database
+npx supabase stop             # stop local Supabase + database
 ```
 
 ### 6. Test the scraper manually

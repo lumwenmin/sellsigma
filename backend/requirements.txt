@@ -1,7 +1,9 @@
 fastapi
 uvicorn[standard]
 supabase
-openai
 httpx
 python-dotenv
 pydantic
+apscheduler
+asyncpraw
+google-genai

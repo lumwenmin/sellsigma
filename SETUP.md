@@ -37,12 +37,16 @@ npx supabase start
 This prints your local URLs and keys — copy them into your `.env`:
 
 ```
-SUPABASE_URL=http://127.0.0.1:54341
+# Use host.docker.internal (not 127.0.0.1) so the backend container can reach local Supabase
+SUPABASE_URL=http://host.docker.internal:<port printed by supabase start>
 SUPABASE_ANON_KEY=<printed by supabase start>
 SUPABASE_SERVICE_ROLE_KEY=<printed by supabase start>
-VITE_SUPABASE_URL=http://127.0.0.1:54341
+# VITE_SUPABASE_URL is used by the browser, so localhost is correct here
+VITE_SUPABASE_URL=http://localhost:<port printed by supabase start>
 VITE_SUPABASE_ANON_KEY=<same as SUPABASE_ANON_KEY>
 ```
+
+> **Why `host.docker.internal`?** The backend runs inside Docker. Inside a container, `127.0.0.1` refers to the container itself — not your host machine. `host.docker.internal` is Docker Desktop's built-in hostname that resolves to the host from inside a container, and also works from the host itself on macOS.
 
 ### 4. Run migrations
 

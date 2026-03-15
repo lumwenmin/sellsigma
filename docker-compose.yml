@@ -9,8 +9,8 @@ services:
       - "8001:8001"
     environment:
       - VITE_API_URL=${VITE_API_URL}
-      - VITE_SUPABASE_URL=${SUPABASE_URL}
-      - VITE_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -23,7 +23,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_URL=${SUPABASE_DOCKER_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - REDDIT_CLIENT_ID=${REDDIT_CLIENT_ID}

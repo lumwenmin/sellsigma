@@ -10,7 +10,7 @@ import {
   Alert,
   Stack,
 } from "@mui/material";
-import { supabase } from "../supabaseClient";
+import { supabase } from "../lib/supabaseClient";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

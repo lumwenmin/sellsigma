@@ -55,7 +55,11 @@ backend/
 frontend/src/
 ├── main.jsx               React entry point — do not edit
 ├── App.jsx                Router + auth guard — add new routes here
-├── supabaseClient.js      Supabase client — do not duplicate
+├── lib/
+│   └── supabaseClient.js  Supabase client singleton — do not duplicate
+├── services/              API call functions — one file per backend resource
+│   ├── posts.js           getPosts, updatePost
+│   └── config.js          getConfig, saveConfig
 ├── pages/                 One file per route/page
 │   ├── LoginPage.jsx      /login
 │   ├── DashboardPage.jsx  /
@@ -71,12 +75,13 @@ frontend/src/
 | New page/route | `pages/<PageName>.jsx` + add `<Route>` in `App.jsx` |
 | Reusable UI component | `components/<ComponentName>.jsx` |
 | New route | `App.jsx` — add inside `<Routes>`, wrap with `<ProtectedRoute>` if auth required |
-| API call logic | Inside the page that owns it — extract to `services/` if shared across pages |
+| API calls for a new resource | `services/<resource>.js` — import into the page that needs it |
 
 ### Rules
-- Pages own their data fetching and state
+- Pages own state and orchestration — no raw `fetch` calls
+- Services own all HTTP calls — they take a token and return data or throw
 - Components are presentational — they receive props and emit callbacks, no direct API calls
-- All Supabase auth goes through `supabaseClient.js` — never create a second client
+- All Supabase auth goes through `lib/supabaseClient.js` — never create a second client
 
 ---
 

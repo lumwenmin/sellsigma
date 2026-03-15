@@ -10,10 +10,9 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../supabaseClient";
+import { supabase } from "../lib/supabaseClient";
+import { getPosts, updatePost } from "../services/posts";
 import PostCard from "../components/PostCard";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export default function DashboardPage({ session }) {
   const [posts, setPosts] = useState([]);
@@ -27,15 +26,12 @@ export default function DashboardPage({ session }) {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     setError("");
-    const params = new URLSearchParams();
-    if (tab === 1) params.set("is_read", false);
-    if (tab === 2) params.set("is_dismissed", true);
     try {
-      const res = await fetch(`${API_URL}/posts?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error(`API error ${res.status}`);
-      setPosts(await res.json());
+      const filters =
+        tab === 1 ? { isRead: false } :
+        tab === 2 ? { isDismissed: true } :
+        {};
+      setPosts(await getPosts(token, filters));
     } catch (e) {
       setError(e.message);
     }
@@ -47,22 +43,14 @@ export default function DashboardPage({ session }) {
   }, [fetchPosts]);
 
   async function handleUpdate(id, fields) {
-    const res = await fetch(`${API_URL}/posts/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(fields),
-    });
-    if (!res.ok) {
-      setError(`Failed to update post (${res.status})`);
-      return;
+    try {
+      await updatePost(token, id, fields);
+      fetchPosts();
+    } catch (e) {
+      setError(e.message);
     }
-    fetchPosts();
   }
 
-  // On All/Unread tabs, hide dismissed posts
   const visiblePosts = tab === 2 ? posts : posts.filter((p) => !p.is_dismissed);
 
   return (

@@ -12,8 +12,7 @@ import {
   CircularProgress,
   Divider,
 } from "@mui/material";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { getConfig, saveConfig } from "../services/config";
 
 export default function ConfigPage({ session }) {
   const [subreddits, setSubreddits] = useState([]);
@@ -28,10 +27,7 @@ export default function ConfigPage({ session }) {
   const token = session.access_token;
 
   useEffect(() => {
-    fetch(`${API_URL}/config`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
+    getConfig(token)
       .then((data) => {
         setSubreddits(data.subreddits || []);
         setSignals(data.intent_signals || []);
@@ -63,20 +59,13 @@ export default function ConfigPage({ session }) {
     setSaving(true);
     setError("");
     setSaved(false);
-    const res = await fetch(`${API_URL}/config`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ subreddits, intent_signals: signals }),
-    });
-    setSaving(false);
-    if (!res.ok) {
-      setError(`Failed to save (${res.status})`);
-    } else {
+    try {
+      await saveConfig(token, { subreddits, intent_signals: signals });
       setSaved(true);
+    } catch (e) {
+      setError(e.message);
     }
+    setSaving(false);
   }
 
   if (loading) {

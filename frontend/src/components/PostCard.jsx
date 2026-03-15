@@ -14,8 +14,11 @@ export default function PostCard({ post, onUpdate }) {
 
   async function update(fields) {
     setLoading(true);
-    await onUpdate(post.id, fields);
-    setLoading(false);
+    try {
+      await onUpdate(post.id, fields);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import PostCard from "../components/PostCard";
 
@@ -21,13 +22,14 @@ export default function DashboardPage({ session }) {
   const [error, setError] = useState("");
 
   const token = session.access_token;
+  const navigate = useNavigate();
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     setError("");
     const params = new URLSearchParams();
-    if (tab === 1) params.set("is_read", "false");
-    if (tab === 2) params.set("is_dismissed", "true");
+    if (tab === 1) params.set("is_read", false);
+    if (tab === 2) params.set("is_dismissed", true);
     try {
       const res = await fetch(`${API_URL}/posts?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -45,7 +47,7 @@ export default function DashboardPage({ session }) {
   }, [fetchPosts]);
 
   async function handleUpdate(id, fields) {
-    await fetch(`${API_URL}/posts/${id}`, {
+    const res = await fetch(`${API_URL}/posts/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -53,6 +55,10 @@ export default function DashboardPage({ session }) {
       },
       body: JSON.stringify(fields),
     });
+    if (!res.ok) {
+      setError(`Failed to update post (${res.status})`);
+      return;
+    }
     fetchPosts();
   }
 
@@ -65,9 +71,14 @@ export default function DashboardPage({ session }) {
         <Typography variant="h5" fontWeight={600}>
           SellSigma
         </Typography>
-        <Button size="small" color="inherit" onClick={() => supabase.auth.signOut()}>
-          Sign out
-        </Button>
+        <Box display="flex" gap={1}>
+          <Button size="small" color="inherit" onClick={() => navigate("/config")}>
+            Settings
+          </Button>
+          <Button size="small" color="inherit" onClick={() => supabase.auth.signOut()}>
+            Sign out
+          </Button>
+        </Box>
       </Box>
 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>

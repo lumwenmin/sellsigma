@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import ConfigPage from "./pages/ConfigPage";
 
 function ProtectedRoute({ session, children }) {
   if (session === undefined) return null; // loading
@@ -32,6 +33,14 @@ export default function App() {
           element={
             <ProtectedRoute session={session}>
               <DashboardPage session={session} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/config"
+          element={
+            <ProtectedRoute session={session}>
+              <ConfigPage session={session} />
             </ProtectedRoute>
           }
         />

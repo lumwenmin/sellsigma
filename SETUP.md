@@ -23,7 +23,7 @@ cp .env.example .env
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r backend/requirements.txt -r scraper/requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 Then in VS Code: `Cmd+Shift+P` → **Python: Select Interpreter** → pick `.venv` (root).
@@ -94,7 +94,7 @@ docker compose up frontend backend --build
 Also reinstall locally so the IDE stays in sync:
 
 ```bash
-pip install -r backend/requirements.txt -r scraper/requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 ---
@@ -140,7 +140,7 @@ Your project ref is in the Supabase dashboard URL: `supabase.com/dashboard/proje
 The scraper runs automatically inside the backend on a daily schedule. To test it locally against fake posts:
 
 ```bash
-cd scraper && python test_scraper.py
+cd scripts && python test_scraper.py
 ```
 
 This fetches your user config from the database and runs the classifier against two hardcoded test posts — one that should be flagged, one that shouldn't.

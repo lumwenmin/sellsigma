@@ -1,4 +1,0 @@
-asyncpraw
-supabase
-google-genai
-python-dotenv
